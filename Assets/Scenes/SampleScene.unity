@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26339480cf116f7449a3a78aa9895f51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  food: {fileID: 395749298}
+  food: {fileID: 395749301}
   snake: {fileID: 1620218596}
 --- !u!4 &117738427
 Transform:

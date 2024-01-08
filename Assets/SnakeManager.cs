@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
@@ -52,6 +53,10 @@ public class SnakeManager : MonoBehaviour {
 
     public void Grow() {
         GenerateSnake(lastPos);
+    }
+
+    public IEnumerable<Vector3> GetCoords() {
+        return snake.Select(x => x.transform.position);
     }
 
     // Update is called once per frame
