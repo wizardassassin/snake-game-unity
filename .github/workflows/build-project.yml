@@ -1,0 +1,58 @@
+name: Builds 😎
+
+on: [workflow_dispatch]
+
+jobs:
+    buildProject:
+        name: Build (${{ matrix.data.name }}) ✨
+        runs-on: ${{ matrix.data.os }}
+        strategy:
+            matrix:
+                data:
+                    [
+                        {
+                            name: Linux,
+                            os: ubuntu-latest,
+                            target: StandaloneLinux64,
+                        },
+                        { name: WebGL, os: ubuntu-latest, target: WebGL },
+                        {
+                            name: MacOS,
+                            os: macos-latest,
+                            target: StandaloneOSX,
+                        },
+                        {
+                            name: Windows,
+                            os: windows-latest,
+                            target: StandaloneWindows64,
+                        },
+                    ]
+        steps:
+            # Checkout
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  lfs: true
+            # Cache
+            - uses: actions/cache@v3
+              with:
+                  path: Library
+                  key: Library-${{ matrix.data.name }}-${{ matrix.data.target }}
+                  restore-keys: |
+                      Library-${{ matrix.data.name }}-
+                      Library-
+            # Build
+            - name: Build project
+              uses: game-ci/unity-builder@v4
+              env:
+                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+                  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+                  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+              with:
+                  targetPlatform: ${{ matrix.data.target }}
+                  buildMethod: UnityBuilderAction.BuildScript.Build
+            # Output
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: Build ${{ matrix.data.name }}
+                  path: build

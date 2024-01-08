@@ -1,0 +1,35 @@
+name: Tests 😎
+
+on: [push, pull_request]
+
+jobs:
+    runTests:
+        name: Test my project ✨
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: read
+            checks: write
+        steps:
+            # Checkout
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  lfs: true
+            # Cache
+            - uses: actions/cache@v3
+              with:
+                  path: Library
+                  key: Library-Linux-Test
+                  restore-keys: |
+                      Library-Linux-
+                      Library-
+            # Test
+            - name: Run tests
+              uses: game-ci/unity-test-runner@v4
+              env:
+                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+                  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+                  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+              with:
+                  githubToken: ${{ secrets.GITHUB_TOKEN }}
