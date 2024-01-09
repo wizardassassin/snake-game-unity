@@ -14,17 +14,25 @@ jobs:
                     [
                         {
                             name: Linux,
+                            os-name: Linux,
                             os: ubuntu-latest,
                             target: StandaloneLinux64,
                         },
-                        { name: WebGL, os: ubuntu-latest, target: WebGL },
+                        {
+                            name: WebGL,
+                            os-name: Linux,
+                            os: ubuntu-latest,
+                            target: WebGL,
+                        },
                         {
                             name: MacOS,
+                            os-name: MacOS,
                             os: macos-latest,
                             target: StandaloneOSX,
                         },
                         {
                             name: Windows,
+                            os-name: Windows,
                             os: windows-latest,
                             target: StandaloneWindows64,
                         },
@@ -39,9 +47,9 @@ jobs:
             - uses: actions/cache@v3
               with:
                   path: Library
-                  key: Library-${{ matrix.data.name }}-${{ matrix.data.target }}
+                  key: Library-${{ matrix.data.os-name }}-${{ matrix.data.target }}
                   restore-keys: |
-                      Library-${{ matrix.data.name }}-
+                      Library-${{ matrix.data.os-name }}-
                       Library-
             # Build
             - name: Build project
