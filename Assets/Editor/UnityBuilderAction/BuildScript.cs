@@ -1,3 +1,5 @@
+// https://game.ci/docs/github/builder
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -169,8 +171,25 @@ namespace UnityBuilderAction {
             };
 
             BuildSummary buildSummary = BuildPipeline.BuildPlayer(buildPlayerOptions).summary;
+            MoveFiles(buildTarget, filePath);
             ReportSummary(buildSummary);
             ExitWithResult(buildSummary.result);
+        }
+
+        private static void MoveFiles(BuildTarget buildTarget, string filePath) {
+            DirectoryInfo info = new(Path.Combine(filePath, ".."));
+            var debugFolders = info.EnumerateDirectories().Where(dir => dir.Name.Contains("ButDontShipIt") || dir.Name.Contains("DoNotShip"));
+            foreach (var item in debugFolders) item.Delete(true);
+            if (buildTarget == BuildTarget.WebGL)
+                MoveUp(new DirectoryInfo(filePath));
+        }
+
+        private static void MoveUp(DirectoryInfo info) {
+            string parent = info.Parent.Name;
+            info.MoveTo(Path.Combine(parent, Path.GetRandomFileName()));
+            foreach (var item in info.EnumerateDirectories()) item.MoveTo(Path.Combine(parent, item.Name));
+            foreach (var item in info.EnumerateFiles()) item.MoveTo(Path.Combine(parent, item.Name));
+            info.Delete();
         }
 
         private static void ReportSummary(BuildSummary summary) {
