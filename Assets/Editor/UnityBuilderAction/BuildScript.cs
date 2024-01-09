@@ -185,7 +185,7 @@ namespace UnityBuilderAction {
         }
 
         private static void MoveUp(DirectoryInfo info) {
-            string parent = info.Parent.Name;
+            string parent = info.Parent.FullName;
             info.MoveTo(Path.Combine(parent, Path.GetRandomFileName()));
             foreach (var item in info.EnumerateDirectories()) item.MoveTo(Path.Combine(parent, item.Name));
             foreach (var item in info.EnumerateFiles()) item.MoveTo(Path.Combine(parent, item.Name));
