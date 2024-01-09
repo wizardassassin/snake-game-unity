@@ -171,8 +171,8 @@ namespace UnityBuilderAction {
             };
 
             BuildSummary buildSummary = BuildPipeline.BuildPlayer(buildPlayerOptions).summary;
-            MoveFiles(buildTarget, filePath);
             ReportSummary(buildSummary);
+            MoveFiles(buildTarget, filePath);
             ExitWithResult(buildSummary.result);
         }
 

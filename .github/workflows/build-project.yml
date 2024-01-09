@@ -9,6 +9,7 @@ jobs:
         name: Build (${{ matrix.data.name }}) ✨
         runs-on: ${{ matrix.data.os }}
         strategy:
+            fail-fast: false
             matrix:
                 data:
                     [
